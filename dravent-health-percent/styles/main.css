@@ -1,0 +1,716 @@
+.dravent-health-percent {
+  --dhp-ink: #f7f6fa;
+  --dhp-muted: #c5c1cc;
+  --dhp-border: rgba(255, 255, 255, 0.26);
+  --dhp-panel: #262626;
+  --dhp-accent: #532159;
+  display: block;
+  position: relative;
+  z-index: 1;
+  margin: 8px 0 12px;
+  padding: 12px 14px;
+  color: var(--dhp-ink);
+  background: var(--dhp-panel);
+  border: 1px solid var(--dhp-border);
+  border-left: 4px solid #532159;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-family: var(--main-font, Arial, sans-serif);
+}
+
+.dravent-health-percent * { box-sizing: border-box; }
+.dravent-health-percent .dhp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.dravent-health-percent .dhp-eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--dhp-muted);
+  font-weight: 700;
+}
+.dravent-health-percent h3 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 2px 0 0;
+  border: 0;
+}
+.dravent-health-percent .dhp-current {
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+}
+.dravent-health-percent .dhp-current small {
+  font-size: 0.85rem;
+  margin-left: 2px;
+}
+.dravent-health-percent .dhp-track {
+  height: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 99px;
+}
+.dravent-health-percent .dhp-fill {
+  height: 100%;
+  min-width: 0;
+  transition: width 120ms ease-out;
+  background: #33834d;
+}
+.dravent-health-percent .dhp-fill.hurt,
+.dravent-health-percent .dhp-fill.injured { background: #b5a327; }
+.dravent-health-percent .dhp-fill.wounded,
+.dravent-health-percent .dhp-fill.mauled { background: #c36a22; }
+.dravent-health-percent .dhp-fill.crippled { background: #a93232; }
+.dravent-health-percent .dhp-fill.incapacitated { background: #3e2424; }
+.dravent-health-percent .dhp-summary {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 7px;
+  font-size: 0.78rem;
+}
+.dravent-health-percent .dhp-state { font-weight: 800; }
+.dravent-health-percent .dhp-state.healthy,
+.dravent-health-percent .dhp-state.bruised,
+.dravent-health-percent .dhp-state.hurt,
+.dravent-health-percent .dhp-state.injured,
+.dravent-health-percent .dhp-state.wounded,
+.dravent-health-percent .dhp-state.mauled,
+.dravent-health-percent .dhp-state.crippled,
+.dravent-health-percent .dhp-state.incapacitated { color: var(--dhp-ink); }
+.dravent-health-percent .dhp-penalty { color: var(--dhp-muted); }
+.dravent-health-percent .dhp-controls {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) auto minmax(90px, 1fr) auto;
+  gap: 8px;
+  align-items: end;
+  margin-top: 11px;
+}
+.dravent-health-percent .dhp-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.dravent-health-percent .dhp-field input {
+  width: 100%;
+  min-height: 29px;
+  padding: 3px 6px;
+  border: 1px solid var(--dhp-border);
+  border-radius: 3px;
+  background: #fff;
+  color: #111;
+  font-size: 0.85rem;
+}
+.dravent-health-percent .dhp-controls button {
+  min-height: 29px;
+  padding: 4px 9px;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: 3px;
+  background: var(--dhp-accent, #532159);
+  color: #fff;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.dravent-health-percent .dhp-controls button:disabled,
+.dravent-health-percent input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.dravent-health-percent .dhp-current-field {
+  grid-column: 1 / span 2;
+}
+.dravent-health-percent .dhp-note {
+  color: var(--dhp-muted);
+  font-size: 0.7rem;
+  line-height: 1.35;
+  margin: 9px 0 0;
+}
+@media (max-width: 650px) {
+  .dravent-health-percent .dhp-controls { grid-template-columns: minmax(0, 1fr) auto; }
+  .dravent-health-percent .dhp-current-field { grid-column: auto; }
+}
+
+/* The original WoD20 health track and weapon lists are replaced in the sheet. */
+.dhp-legacy-hidden,
+.dhp-legacy-weapon-hidden {
+  display: none !important;
+}
+
+.dravent-health-percent.dhp-health-panel {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 0 100%;
+  clear: both;
+}
+
+.dhp-arsenal {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  grid-column: 1 / -1;
+  flex: 0 0 100%;
+  align-self: stretch;
+  overflow: visible;
+}
+.dhp-arsenal * { box-sizing: border-box; min-width: 0; }
+.dhp-arsenal .dhp-header { margin-bottom: 10px; }
+.dhp-arsenal-subtitle { color: var(--dhp-muted); font-size: 0.78rem; }
+.dhp-arsenal-add {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: minmax(180px, 1fr) repeat(4, auto);
+  gap: 8px;
+  align-items: end;
+  margin: 10px 0 12px;
+}
+.dhp-arsenal-add .dhp-field { min-width: 0; }
+.dhp-arsenal-add select,
+.dhp-custom-form input,
+.dhp-custom-form select,
+.dhp-inline-field input,
+.dhp-inline-field select {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 30px;
+  box-sizing: border-box;
+  border: 1px solid var(--dhp-border);
+  border-radius: 3px;
+  padding: 4px 7px;
+  background: #fff;
+  color: #151515;
+  font: inherit;
+  font-size: 0.8rem;
+}
+.dhp-arsenal button,
+.dhp-chat-card button {
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 3px;
+  padding: 6px 10px;
+  background: var(--dhp-accent, #532159);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.dhp-arsenal button:disabled,
+.dhp-chat-card button:disabled { opacity: 0.5; cursor: not-allowed; }
+.dhp-weapon-list {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+.dhp-weapon-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid var(--dhp-border);
+  border-radius: 4px;
+  background: var(--dhp-panel);
+  background: color-mix(in srgb, var(--dhp-panel) 88%, var(--dhp-ink) 12%);
+}
+.dhp-weapon-main { display: flex; min-width: 0; flex-direction: column; gap: 3px; overflow-wrap: anywhere; }
+.dhp-weapon-main strong { font-size: 0.88rem; }
+.dhp-weapon-main span { font-size: 0.78rem; }
+.dhp-weapon-main small { color: var(--dhp-muted); font-size: 0.69rem; line-height: 1.3; overflow-wrap: anywhere; }
+.dhp-weapon-controls {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 7px;
+}
+.dhp-weapon-controls > * { max-width: 100%; min-width: 0; }
+.dhp-inline-field { display: flex; width: 105px; min-width: 0; flex: 0 1 105px; flex-direction: column; gap: 3px; margin: 0; font-size: 0.66rem; font-weight: 700; }
+.dhp-inline-field input, .dhp-inline-field select { min-height: 30px; }
+.dhp-empty { color: var(--dhp-muted); font-size: 0.8rem; margin: 8px 0; }
+.dhp-custom-form {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: visible;
+  border: 1px solid var(--dhp-border);
+  border-radius: 4px;
+  padding: 10px;
+  margin: 0 0 12px;
+  background: var(--dhp-panel);
+  background: color-mix(in srgb, var(--dhp-panel) 88%, var(--dhp-ink) 12%);
+}
+.dhp-custom-form[hidden] { display: none !important; }
+.dhp-custom-form h4 { margin: 0 0 8px; border: 0; }
+.dhp-custom-grid {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 8px;
+}
+.dhp-custom-grid label { display: flex; min-width: 0; flex-direction: column; gap: 4px; margin: 0; font-size: 0.7rem; font-weight: 700; overflow-wrap: anywhere; }
+.dhp-custom-grid input,
+.dhp-custom-grid select { min-width: 0; width: 100%; max-width: 100%; }
+.dhp-custom-grid small { color: var(--dhp-muted); font-size: 0.65rem; font-weight: 400; line-height: 1.25; }
+.dhp-custom-form .dhp-weapon-controls { justify-content: flex-end; margin-top: 10px; }
+.dhp-custom-form .dhp-weapon-controls button { width: auto; min-width: 120px; flex: 0 1 auto; }
+/* Compact, visual chat cards - colors inherit the active WoD20 sheet theme where possible. */
+.dhp-chat-card {
+  --dhp-chat-accent: var(--dhp-accent, #532159);
+  color: #f7f6fa;
+  max-width: 560px;
+  padding: 10px 11px;
+  border: 1px solid rgba(140, 132, 148, .36);
+  border-left: 3px solid var(--dhp-chat-accent);
+  border-radius: 7px;
+  background: #242229;
+  font-size: 0.83rem;
+  line-height: 1.35;
+}
+.dhp-chat-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 7px;
+  padding: 0 0 7px;
+  border-bottom: 1px solid rgba(160, 150, 170, .3);
+  font-size: .93rem;
+  line-height: 1.25;
+}
+.dhp-chat-card p { margin: 5px 0; }
+.dhp-attack-meta, .dhp-roll-meta { color: #c7c3cd; font-size: .75rem; }
+.dhp-attack-meta { margin: 2px 0 7px; }
+.dhp-success-count { display: flex; align-items: center; gap: 6px; margin: 5px 0 2px; color: #c7c3cd; font-size: .77rem; }
+.dhp-success-count > strong { color: #ffffff; font-size: 1.05rem; font-weight: 800; }
+.dhp-hit-badge, .dhp-miss-badge, .dhp-mini-badge, .dhp-type-badge {
+  display: inline-flex; align-items: center; border-radius: 99px; padding: 2px 7px; font-size: .64rem; font-weight: 800; letter-spacing: .02em;
+}
+.dhp-hit-badge { background: rgba(51, 131, 77, .2); color: #64d58a; }
+.dhp-miss-badge { background: rgba(169, 50, 50, .2); color: #ff8f8f; }
+.dhp-type-badge { margin-left: auto; }
+.dhp-type-b { color: #70b8ff; background: rgba(75, 155, 230, .15); }
+.dhp-type-l { color: #ffb86f; background: rgba(220, 132, 54, .17); }
+.dhp-type-a { color: #f38ce7; background: rgba(214, 61, 191, .18); }
+.dhp-dice-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: 4px 0 5px; }
+.dhp-dice-empty { color: #c7c3cd; font-size: .72rem; }
+.dhp-die {
+  position: relative; width: 31px; height: 33px; display: inline-grid; place-items: center;
+  flex: 0 0 31px; background: transparent; color: #fff; font-size: .78rem; font-weight: 800;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.42));
+}
+.dhp-die > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; user-select: none; pointer-events: none; }
+.dhp-die > span { position: relative; z-index: 1; transform: translateY(1px); color: #fff; text-shadow: 0 1px 2px #151219, 0 0 2px #151219; }
+.dhp-die--miss { opacity: .68; }
+.dhp-die--miss > img, .dhp-die--cancelled > img { filter: grayscale(1) brightness(.7); }
+.dhp-die--success > img { filter: sepia(.75) saturate(2.6) hue-rotate(76deg) brightness(.9); }
+.dhp-die--critical > img { filter: sepia(.9) saturate(2.6) hue-rotate(350deg) brightness(1.05); }
+.dhp-die--critical > span { color: #201600; text-shadow: 0 1px 1px #f8d779; }
+.dhp-die--one > img { filter: sepia(.9) saturate(4) hue-rotate(310deg) brightness(.8); }
+.dhp-die--cancelled { opacity: .58; }
+.dhp-die--cancelled > span { text-decoration: line-through; }
+.dhp-cancel-note { margin: 1px 0 4px; color: #e6a6a6; font-size: .69rem; }
+.dhp-combat-roll-section { margin-top: 8px; padding: 8px 0 0; border-top: 1px solid rgba(160,150,170,.25); }
+.dhp-section-heading { display: flex; align-items: center; gap: 6px; font-size: .79rem; font-weight: 800; }
+.dhp-roll-block { margin-top: 4px; }
+.dhp-roll-label { display: none; }
+.dhp-contribution { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 3px; color: #c7c3cd; font-size: .73rem; }
+.dhp-contribution > span { color: #ffffff; }
+.dhp-contribution strong { color: #d9f4e2; font-size: .89rem; }
+.dhp-critical-block { margin-top: 8px; padding-top: 7px; border-top: 1px dashed rgba(216,179,75,.35); }
+.dhp-mini-badge { background: rgba(230,179,57,.16); color: #f4cb60; }
+.dhp-damage-total { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 9px; padding: 9px 10px; border-radius: 5px; background: rgba(140, 70, 154, 0.26);
+  background: color-mix(in srgb, var(--dhp-chat-accent) 26%, transparent); }
+.dhp-damage-total span { color: #ffffff !important; font-size: .77rem; font-weight: 700; }
+.dhp-damage-total strong { color: #ffffff !important; font-size: 1.3rem; line-height: 1; }
+.dhp-target-line { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 7px; color: #c7c3cd; font-size: .73rem; }
+.dhp-target-line strong { color: #ffffff; }
+.dhp-defense-controls { display: grid; grid-template-columns: minmax(0, 1fr) 58px auto; gap: 7px; align-items: end; margin-top: 9px; padding-top: 8px; border-top: 1px solid rgba(160,150,170,.25); }
+.dhp-defense-controls label { display: flex; min-width: 0; flex-direction: column; gap: 3px; font-size: .7rem; color: #c7c3cd; }
+.dhp-defense-controls select, .dhp-defense-controls input { width: 100%; min-height: 29px; padding: 4px 6px; border: 1px solid rgba(160,150,170,.4); border-radius: 4px; background: var(--color-cool-4, #38343d); color: #ffffff; font-size: .76rem; }
+.dhp-defense-controls button, .dhp-chat-apply { padding: 7px 10px; border: 0; border-radius: 4px; background: var(--dhp-chat-accent); color: white; font-weight: 800; font-size: .74rem; white-space: nowrap; cursor: pointer; }
+.dhp-target-hint { margin-top: 8px; color: #c7c3cd; font-size: .72rem; }
+.dhp-defense-received { display: flex; align-items: center; gap: 8px; margin: 4px 0 7px; }
+.dhp-defense-received span { color: #c7c3cd; font-size: .75rem; }
+.dhp-defense-received strong { font-size: 1.12rem; }
+.dhp-defense-received em { color: #c7c3cd; font-size: .68rem; font-style: normal; }
+.dhp-armor-label { margin-top: 4px; color: #c7c3cd; font-size: .7rem; }
+.dhp-status-badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0 2px; }
+.dhp-status-badges span { padding: 2px 6px; border: 1px solid rgba(160,150,170,.25); border-radius: 99px; color: #c7c3cd; font-size: .64rem; }
+.dhp-defense-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
+.dhp-defense-summary > div { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 8px; border-radius: 5px; background: rgba(255,255,255,.055); }
+.dhp-defense-summary span { color: #c7c3cd; font-size: .7rem; }
+.dhp-defense-summary strong { font-size: 1rem; }
+.dhp-vitality-result { margin-top: 7px; text-align: right; color: #c7c3cd; font-size: .73rem; }
+.dhp-vitality-result strong { color: #ffffff; font-size: .9rem; }
+.dhp-vitality-result span { padding: 0 3px; }
+.dhp-no-roll, .dhp-no-damage { margin-top: 6px; color: #c7c3cd; font-size: .72rem; }
+.dhp-chat-apply { width: 100%; margin-top: 8px; }
+@media (max-width: 850px) {
+  .dhp-arsenal-add { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dhp-arsenal-add .dhp-field { grid-column: 1 / -1; }
+  .dhp-arsenal-add button { width: 100%; }
+  .dhp-defense-controls { grid-template-columns: minmax(0, 1fr) 52px; }
+  .dhp-defense-controls button { grid-column: 1 / -1; width: 100%; }
+}
+@media (max-width: 540px) {
+  .dhp-custom-grid { grid-template-columns: minmax(0, 1fr); }
+  .dhp-arsenal-add { grid-template-columns: minmax(0, 1fr); }
+  .dhp-custom-form .dhp-weapon-controls { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .dhp-custom-form .dhp-weapon-controls button { width: 100%; }
+  .dhp-inline-field, .dhp-inline-field.dhp-ammo-field { width: 100%; flex-basis: 100%; }
+  .dhp-defense-summary { grid-template-columns: minmax(0, 1fr); }
+}
+
+
+.dhp-macro-picker { color: #f7f6fa; background: #242229; display: grid; gap: 10px; padding: 4px; }
+.dhp-macro-picker p { margin: 0; color: #d2ced8; font-size: .78rem; line-height: 1.4; }
+.dhp-macro-picker label { display: flex; flex-direction: column; gap: 4px; color: #fff; font-weight: 700; font-size: .78rem; }
+.dhp-macro-picker select { width: 100%; min-height: 34px; color: #111; background: #fff; border: 1px solid #8d8296; border-radius: 4px; padding: 5px 7px; }
+.dhp-macro-picker .dhp-macro-hint { padding-top: 7px; border-top: 1px solid rgba(255,255,255,.16); }
+
+/* Editor visual de macros: sem banner dentro da ficha. */
+.dhp-macro-dialog .window-content { overflow-y: auto !important; background: #211e25 !important; color: #f8f6fa !important; }
+.dhp-macro-dialog .dialog-content { padding: 10px !important; }
+.dhp-macro-dialog .dialog-buttons { gap: 8px !important; padding: 7px 10px 10px !important; }
+.dhp-macro-dialog .dialog-buttons button { min-height: 34px; background: #57235f; color: #fff; border: 1px solid #85518d; border-radius: 4px; font-weight: 800; }
+.dhp-macro-manager, .dhp-macro-editor { display: flex; flex-direction: column; gap: 12px; min-width: 0; color: #f8f6fa; font-size: .82rem; }
+.dhp-macro-manager *, .dhp-macro-editor * { box-sizing: border-box; }
+.dhp-macro-intro { display: flex; align-items: center; gap: 11px; padding: 12px; border: 1px solid rgba(180, 143, 190, .35); border-radius: 6px; background: #2b2630; }
+.dhp-macro-intro-icon { display: grid; flex: 0 0 44px; place-items: center; width: 44px; height: 44px; border-radius: 8px; color: #fff; background: #5d2767; font-size: 1.25rem; }
+.dhp-macro-intro h3 { margin: 0 0 3px; padding: 0; border: 0; color: #fff; font-size: 1.05rem; line-height: 1.2; }
+.dhp-macro-intro p { margin: 0; color: #d9d3df; font-size: .76rem; line-height: 1.4; }
+.dhp-macro-top-fields { display: grid; grid-template-columns: minmax(0, 1fr) 94px 84px; gap: 10px; align-items: end; }
+.dhp-macro-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; margin: 0; color: #fff; font-size: .76rem; font-weight: 800; }
+.dhp-macro-field > span { color: #fff !important; }
+.dhp-macro-editor input[type="text"], .dhp-macro-editor input[type="number"], .dhp-macro-editor select { width: 100%; min-width: 0; min-height: 36px; padding: 6px 8px; border: 1px solid #69566f; border-radius: 4px; background: #fff; color: #161219; font-size: .82rem; font-weight: 500; }
+.dhp-macro-mode-panel { display: flex; flex-direction: column; gap: 10px; padding: 12px; border: 1px solid rgba(180, 143, 190, .45); border-radius: 6px; background: #29242e; }
+.dhp-macro-mode-panel[hidden], .dhp-macro-editor [hidden] { display: none !important; }
+.dhp-macro-panel-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.dhp-macro-panel-heading strong { display: block; color: #fff; font-size: .9rem; }
+.dhp-macro-panel-heading p { margin: 3px 0 0; color: #d2cbd8; font-size: .72rem; line-height: 1.35; }
+.dhp-macro-pool-preview, .dhp-macro-value-pill { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; padding: 7px 10px; border: 1px solid #7b4885; border-radius: 5px; background: #3c2242; color: #fff; font-weight: 900; white-space: nowrap; }
+.dhp-macro-component-list { display: flex; flex-direction: column; gap: 7px; }
+.dhp-macro-component { display: grid; grid-template-columns: 25px minmax(115px, .75fr) minmax(160px, 1.25fr) 32px; align-items: end; gap: 7px; padding: 8px; border: 1px solid #4e4453; border-radius: 5px; background: #211e25; }
+.dhp-macro-row-number { display: flex; align-self: center; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: #5b2364; color: #fff; font-size: .75rem; font-weight: 900; }
+.dhp-macro-component label { display: flex; flex-direction: column; gap: 4px; min-width: 0; color: #e5dfe9; font-size: .69rem; font-weight: 700; }
+.dhp-macro-component [data-dhp-component-choice], .dhp-macro-component [data-dhp-component-fixed] { grid-column: 3; grid-row: 1; }
+.dhp-macro-component .dhp-macro-remove-row { grid-column: 4; grid-row: 1; }
+.dhp-macro-component label > span { color: #e5dfe9; }
+.dhp-macro-component select { width: 100%; min-width: 0; min-height: 33px; padding: 5px 7px; background: #fff; color: #171319; border: 1px solid #72627a; border-radius: 4px; font-size: .76rem; }
+.dhp-macro-fixed-trait { align-items: center; min-height: 33px; padding: 6px 8px; border: 1px solid #4c4052; border-radius: 4px; color: #fff; background: #342d39; font-size: .74rem; font-weight: 700; }
+.dhp-macro-remove-row { width: 32px; height: 33px; padding: 0; border: 1px solid #83464d; border-radius: 4px; background: #46272d; color: #ffdfe2; cursor: pointer; }
+.dhp-macro-add, .dhp-macro-new { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 38px; width: 100%; padding: 8px 10px; border: 1px dashed #9862a3; border-radius: 5px; background: #39213f; color: #fff; font-weight: 800; cursor: pointer; }
+.dhp-macro-add:hover, .dhp-macro-new:hover { background: #6d2f77 !important; }
+.dhp-macro-bottom-fields { display: grid; grid-template-columns: minmax(110px, .45fr) minmax(0, 1.5fr); align-items: end; gap: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.12); }
+.dhp-macro-help { align-self: center; margin: 0; color: #d4cedb; font-size: .73rem; line-height: 1.45; }
+.dhp-macro-weapon-fields { grid-template-columns: minmax(80px, .5fr) minmax(110px, .8fr) minmax(140px, 1fr); }
+
+.dhp-macro-section-label { display: block; margin: 2px 0 -4px; color: #f7f2fa; font-size: .74rem; font-weight: 900; }
+.dhp-macro-magic-traits { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.dhp-macro-magic-trait { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 9px; border: 1px solid #6b4a75; border-radius: 5px; background: #302536; color: #fff; font-size: .76rem; font-weight: 800; }
+.dhp-macro-magic-trait input { flex: 0 0 auto; width: 16px; height: 16px; accent-color: #8c469a; }
+.dhp-macro-magic-trait span { flex: 1 1 auto; min-width: 0; }
+.dhp-macro-magic-trait small { padding: 3px 5px; border-radius: 4px; background: #49304f; color: #fff; font-weight: 900; white-space: nowrap; }
+.dhp-macro-magic-results { display: grid; gap: 8px; margin-top: 8px; }
+.dhp-macro-magic-result { padding: 8px; border: 1px solid rgba(180,143,190,.32); border-radius: 5px; background: rgba(30,24,34,.6); }
+.dhp-macro-magic-result > header { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 5px; color: #fff; }
+.dhp-macro-magic-result .dhp-damage-total > span, .dhp-macro-magic-result .dhp-damage-total > strong { color: #fff !important; -webkit-text-fill-color: #fff !important; }
+.dhp-macro-warning { margin: 3px 0; padding: 8px; border-radius: 4px; background: #49352b; color: #fff2df; font-size: .74rem; }
+.dhp-scene-control-macro { color: var(--color-text-primary, #fff); }
+
+.dhp-macro-sphere-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.dhp-macro-sphere { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 8px; border: 1px solid #4d4353; border-radius: 4px; background: #211e25; color: #fff; font-size: .76rem; }
+.dhp-macro-sphere input { flex: 0 0 auto; width: 16px; height: 16px; accent-color: #8c469a; }
+.dhp-macro-sphere span { flex: 1 1 auto; min-width: 0; }
+.dhp-macro-sphere small { display: inline-flex; align-items: center; justify-content: center; width: 21px; height: 21px; border-radius: 50%; background: #49304f; color: #fff; font-weight: 900; }
+.dhp-macro-footer-note { display: flex; align-items: flex-start; gap: 7px; padding: 9px 10px; border: 1px solid rgba(180,143,190,.24); border-radius: 5px; background: rgba(255,255,255,.035); color: #d8d2de; font-size: .71rem; line-height: 1.45; }
+.dhp-macro-footer-note i { margin-top: 2px; color: #d3a1dc; }
+.dhp-macro-saved-list { display: flex; flex-direction: column; gap: 7px; }
+.dhp-macro-saved-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto 34px; align-items: center; gap: 8px; padding: 8px; border: 1px solid #4e4453; border-radius: 5px; background: #29242e; }
+.dhp-macro-saved-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 5px; background: #4c2255; color: #fff; font-size: 1rem; }
+.dhp-macro-saved-details { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.dhp-macro-saved-details strong { overflow: hidden; color: #fff; text-overflow: ellipsis; white-space: nowrap; font-size: .82rem; }
+.dhp-macro-saved-details span { color: #d5cedd; font-size: .7rem; }
+.dhp-macro-saved-row button { min-height: 32px; padding: 5px 9px; border: 1px solid #765180; border-radius: 4px; background: #4c2255; color: #fff; font-size: .73rem; font-weight: 800; }
+.dhp-macro-saved-row button.dhp-macro-delete { width: 34px; padding: 0; background: #44262c; border-color: #78444b; color: #ffdce0; }
+.dhp-macro-empty { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 24px 16px; border: 1px dashed #6b5b72; border-radius: 6px; text-align: center; color: #d5cedd; }
+.dhp-macro-empty > i { color: #c49bce; font-size: 1.5rem; }
+.dhp-macro-empty strong { color: #fff; font-size: .88rem; }
+.dhp-macro-empty p { max-width: 390px; margin: 0; font-size: .75rem; line-height: 1.45; }
+.dhp-macro-roll-card .dhp-damage-total span { color: #fff !important; }
+.dhp-macro-sphere-result { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 8px 0; color: #ddd; font-size: .73rem; }
+.dhp-macro-sphere-result strong { margin-right: 3px; color: #fff; }
+.dhp-macro-sphere-result span { padding: 3px 7px; border: 1px solid #694875; border-radius: 99px; background: #382540; color: #fff; }
+@media (max-width: 620px) {
+  .dhp-macro-top-fields { grid-template-columns: minmax(0, 1fr) 88px 78px; gap: 7px; }
+  .dhp-macro-name-field { grid-column: 1 / -1; }
+  .dhp-macro-magic-traits { grid-template-columns: 1fr; }
+  .dhp-macro-component { grid-template-columns: 25px minmax(0, 1fr) minmax(0, 1.4fr) 32px; }
+  .dhp-macro-component [data-dhp-component-fixed] { grid-column: 3; grid-row: 1; }
+  .dhp-macro-sphere-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dhp-macro-bottom-fields, .dhp-macro-weapon-fields { grid-template-columns: 1fr; }
+  .dhp-macro-saved-row { grid-template-columns: 32px minmax(0, 1fr) auto 30px; gap: 5px; }
+  .dhp-macro-saved-icon { width: 30px; height: 30px; }
+}
+
+
+/* High contrast override for combat cards in both light and dark chat themes. */
+.chat-message .dhp-chat-card .dhp-damage-total > span,
+.chat-message .dhp-chat-card .dhp-damage-total > strong,
+.dhp-chat-card .dhp-damage-total > span,
+.dhp-chat-card .dhp-damage-total > strong {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+.dhp-chat-card .dhp-damage-total > span {
+  font-size: .78rem !important;
+  font-weight: 800 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6) !important;
+}
+
+
+/* Catálogo integrado de proteções, sem substituir o estilo atual do Arsenal. */
+.dhp-armor-catalog {
+  margin-top: 13px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(160,150,170,.28);
+}
+.dhp-armor-catalog-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:8px; }
+.dhp-armor-catalog-heading strong { display:block; color:#fff; font-size:.9rem; }
+.dhp-armor-catalog-heading small { display:block; margin-top:3px; color:var(--dhp-muted); font-size:.69rem; line-height:1.35; }
+.dhp-armor-catalog-controls { display:grid; grid-template-columns:minmax(180px,1fr) auto; gap:8px; align-items:end; }
+.dhp-armor-catalog-controls select { width:100%; min-width:0; min-height:31px; padding:4px 7px; color:#16131a; background:#fff; border:1px solid var(--dhp-border); border-radius:3px; font:inherit; font-size:.78rem; }
+.dhp-armor-catalog-controls button { min-height:31px; padding:6px 10px; color:#fff; background:var(--dhp-accent,#532159); border:1px solid rgba(0,0,0,.24); border-radius:3px; font-size:.75rem; font-weight:800; cursor:pointer; }
+.dhp-armor-catalog-controls button:disabled { opacity:.55; cursor:not-allowed; }
+.dhp-armor-catalog .dhp-note { margin-top:6px; }
+.dhp-region-field { width:115px; flex-basis:115px; }
+.dhp-unauthorized-hidden { display:none !important; }
+
+/* Mantém os SVGs coloridos nativos do WoD20 e usa contornos para identificar os dados. */
+.wod20-roll img.wod-svg.dhp-native-die-one { outline:2px solid #d34a4a; outline-offset:-2px; border-radius:6px; }
+.wod20-roll img.wod-svg.dhp-native-die-failure { opacity:.73; }
+.wod20-roll img.wod-svg.dhp-native-die-success { outline:1px solid rgba(89,190,127,.75); outline-offset:-2px; border-radius:6px; }
+.wod20-roll img.wod-svg.dhp-native-die-ten { outline:2px solid #d5b1f0; outline-offset:-2px; border-radius:6px; }
+.wod20-roll img.wod-svg.dhp-native-die-cancelled { opacity:.46; filter:grayscale(.8) brightness(.72); outline:2px dashed #d34a4a; outline-offset:-2px; border-radius:6px; }
+
+@media (max-width: 700px) {
+  .dhp-armor-catalog-controls { grid-template-columns:minmax(0,1fr); }
+  .dhp-armor-catalog-controls button { width:100%; }
+  .dhp-region-field { width:100%; flex-basis:100%; }
+}
+
+
+/* Cobertura de proteção no editor nativo de armaduras, em estilo compacto Dravent. */
+.dhp-armor-item-coverage { margin: 10px 0; padding: 10px; border: 1px solid rgba(152,98,163,.55); border-radius: 5px; background: rgba(76,34,85,.14); color: var(--color-text-primary, #fff); }
+.dhp-armor-item-coverage > strong { display: block; margin-bottom: 4px; color: var(--color-text-primary, #fff); font-size: .86rem; }
+.dhp-armor-item-coverage > p { margin: 0 0 8px; color: var(--color-text-secondary, #d2cbd8); font-size: .72rem; line-height: 1.35; }
+.dhp-armor-coverage-options { display: flex; flex-wrap: wrap; gap: 7px; }
+.dhp-armor-coverage-options label { display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; border: 1px solid rgba(152,98,163,.35); border-radius: 4px; background: rgba(76,34,85,.22); color: var(--color-text-primary, #fff); font-size: .72rem; cursor: pointer; }
+.dhp-armor-coverage-options input { accent-color: #7c3688; }
+
+
+/* Action available only to the defender for their pending native WoD20 magic roll. */
+.dhp-use-magic-defense {
+  display: block;
+  width: 100%;
+  margin: 8px 0 2px;
+  padding: 8px 12px;
+  border: 1px solid var(--dhp-chat-accent, #64266b);
+  border-radius: 5px;
+  background: var(--dhp-chat-accent, #64266b);
+  color: #ffffff !important;
+  font-weight: 800;
+  cursor: pointer;
+}
+.dhp-use-magic-defense:hover { filter: brightness(1.12); }
+.dhp-use-magic-defense:disabled { opacity: .55; cursor: not-allowed; }
+
+/* v0.10.0: contraste e legibilidade da seleção de armadura/defesa. */
+.dhp-armor-item-coverage {
+  color: #f7f6fa !important;
+  background: #26232b !important;
+  border-color: rgba(188, 125, 204, .72) !important;
+}
+.dhp-armor-item-coverage > strong,
+.dhp-armor-item-coverage > p,
+.dhp-armor-item-coverage label,
+.dhp-armor-item-coverage label span {
+  color: #f7f6fa !important;
+  -webkit-text-fill-color: #f7f6fa !important;
+}
+.dhp-armor-item-coverage > p { color: #d4cddc !important; }
+.dhp-armor-coverage-options label {
+  background: #38313e !important;
+  border-color: #72527b !important;
+  padding: 8px 10px !important;
+  font-size: .82rem !important;
+}
+.dhp-armor-coverage-options input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #8b3e98;
+}
+.dhp-target-identity {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(174, 112, 190, .42);
+  border-radius: 5px;
+  background: rgba(103, 43, 116, .24);
+  color: #ded8e5;
+  font-size: .82rem;
+}
+.dhp-target-identity > strong {
+  color: #fff !important;
+  font-size: 1.02rem;
+  font-weight: 800;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.dhp-target-identity > small {
+  color: #e1d6e8 !important;
+  font-size: .84rem;
+}
+.dhp-defense-controls {
+  grid-template-columns: minmax(0, 1fr) minmax(70px, 90px) auto;
+}
+.dhp-defense-controls select,
+.dhp-defense-controls input {
+  color: #fff !important;
+  background: #2b2731 !important;
+  border-color: #785d81 !important;
+  font-size: .85rem !important;
+  min-height: 34px !important;
+}
+.dhp-defense-controls select option {
+  color: #17131b;
+  background: #fff;
+}
+.dhp-defense-controls label > span { color: #f1edf5 !important; font-size: .8rem; font-weight: 700; }
+.dhp-defender-picker {
+  display: grid;
+  gap: 10px;
+  padding: 8px;
+  color: #fff;
+  background: #26232b;
+}
+.dhp-defender-picker p { margin: 0; line-height: 1.4; color: #ddd5e5; }
+.dhp-defender-picker label { display: grid; gap: 5px; color: #fff; font-weight: 700; }
+.dhp-defender-picker select { width: 100%; min-height: 36px; padding: 6px 8px; color: #17131b; background: #fff; border: 1px solid #8d7297; border-radius: 4px; }
+.dhp-life-percent { margin-top: 5px; color: var(--dhp-muted); text-align: right; font-size: .72rem; font-weight: 700; }
+.dhp-vitality-result { line-height: 1.4; }
+.dhp-defense-received strong { color: #fff; font-size: 1.2rem; }
+.dhp-defense-summary strong { color: #f7f2fc; }
+
+
+/* v0.10.0: make selected target and armor controls readable in dark Foundry/WoD20 sheets. */
+.dhp-target-identity,
+.dhp-target-identity * {
+  color: #f8f6fb !important;
+  -webkit-text-fill-color: #f8f6fb !important;
+  opacity: 1 !important;
+}
+.dhp-target-identity {
+  background: #28232d !important;
+  border: 1px solid #9960a5 !important;
+  padding: 10px 12px !important;
+  min-height: 58px;
+}
+.dhp-target-identity > span { font-size: .86rem !important; font-weight: 700 !important; }
+.dhp-target-identity > strong {
+  display: block !important;
+  font-size: 1.18rem !important;
+  line-height: 1.35 !important;
+  font-weight: 850 !important;
+  word-break: break-word !important;
+}
+.dhp-target-identity > small { font-size: .94rem !important; font-weight: 650 !important; }
+.dhp-armor-item-coverage,
+.dhp-armor-item-coverage * {
+  color: #f8f6fb !important;
+  -webkit-text-fill-color: #f8f6fb !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+.dhp-armor-item-coverage {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: #28232d !important;
+  border: 1px solid #9960a5 !important;
+  padding: 12px !important;
+  border-radius: 6px !important;
+  margin: 10px 0 !important;
+}
+.dhp-armor-item-coverage > strong { font-size: 1rem !important; font-weight: 800 !important; }
+.dhp-armor-item-coverage > p { font-size: .84rem !important; line-height: 1.45 !important; color: #ded7e5 !important; }
+.dhp-armor-coverage-options { display: flex !important; align-items: center !important; }
+.dhp-armor-coverage-options label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  width: auto !important;
+  max-width: 100% !important;
+  background: #3a3140 !important;
+  border: 1px solid #875d91 !important;
+  border-radius: 5px !important;
+  padding: 10px 12px !important;
+  font-size: .92rem !important;
+  font-weight: 750 !important;
+}
+.dhp-armor-coverage-options input[type="checkbox"] { flex: 0 0 auto; width: 19px !important; height: 19px !important; accent-color: #8d45a0 !important; }
+[data-dhp-native-vitality="true"] {
+  display: inline-block !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  font-size: .94rem !important;
+  line-height: 1.35 !important;
+  font-weight: 800 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Dravent v0.11.0 - automatic fire maneuvers and general absorption dialog */
+.dhp-weapon-controls .dhp-fire-mode-field { min-width: 245px; }
+.dhp-weapon-controls .dhp-fire-mode-field select { min-width: 230px; max-width: 100%; }
+.dhp-weapon-controls .dhp-suppress-area-field { min-width: 120px; }
+.dhp-weapon-controls [hidden] { display: none !important; }
+.dhp-standalone-soak-form { display: grid; gap: 10px; color: var(--color-text-primary, #fff); }
+.dhp-standalone-soak-form label { display: grid; gap: 4px; font-weight: 700; }
+.dhp-standalone-soak-form select, .dhp-standalone-soak-form input { min-height: 30px; padding: 4px 8px; color: #fff; background: #242129; border: 1px solid #74487b; border-radius: 4px; }
