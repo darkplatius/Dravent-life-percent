@@ -1,0 +1,36 @@
+{
+  "id": "dravent-health-percent",
+  "title": "Dravent - Vida, Combate e Macros de Rolagem (WoD20)",
+  "description": "Vitalidade percentual para atores com proprietário jogador, PV absolutos para fichas controladas só pelo GM, combate Dravent, armaduras, fogo automático, defesas e macros WoD20. Recuperação de ativação e permissões de defesa por alvo.",
+  "version": "0.13.1",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14",
+    "maximum": ""
+  },
+  "authors": [
+    {
+      "name": "Gleison Cardoso (Mestre Platius)"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "worldofdarkness",
+        "type": "system",
+        "compatibility": {
+          "minimum": "7.3.1",
+          "verified": "7.3.1"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/main.js"
+  ],
+  "styles": [
+    "styles/main.css"
+  ],
+  "manifest": "https://r2.foundryvtt.com/packages-public/dravent-health-percent/module.json",
+  "protected": true
+}
