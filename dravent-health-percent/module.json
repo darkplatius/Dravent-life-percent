@@ -1,7 +1,7 @@
 {
   "id": "dravent-health-percent",
   "title": "Dravent - Vida, Combate e Macros de Rolagem (WoD20)",
-  "description": "Vitalidade percentual para atores com proprietário jogador, PV absolutos para fichas controladas só pelo GM, combate Dravent, armaduras, fogo automático, defesas e macros WoD20. Recuperação de ativação e permissões de defesa por alvo.",
+  "description": "Esse módulo tem por objetivo substituir o sistema de vida do sistmea WoD20, focado a principio no sistema de Mago 20.",
   "version": "0.13.1",
   "compatibility": {
     "minimum": "14",
